@@ -1,0 +1,93 @@
+/* Réinitialisation de style de base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Titre */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #007BFF; /* Couleur principale */
+}
+
+/* Formulaire */
+form {
+    background: white;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Étiquettes */
+label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: bold;
+}
+
+/* Champs de texte */
+input[type="text"],
+input[type="number"],
+textarea,
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+/* Effet de focus sur les champs */
+input:focus,
+textarea:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Boutons */
+button {
+    background-color: #007BFF; /* Couleur principale */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Effet de hover sur le bouton */
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Lien de retour au dashboard */
+.btn-dashboard {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #28a745; /* Vert */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-top: 15px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+/* Effet de hover sur le lien */
+.btn-dashboard:hover {
+    background-color: #218838;
+}
