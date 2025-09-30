@@ -1,0 +1,13 @@
+{
+    "name": "admin/e-commerce",
+    "description": "a",
+    "authors": [
+        {
+            "name": "admin"
+        }
+    ],
+    "require": {
+        "sonata-project/google-authenticator": "^2.3",
+        "stripe/stripe-php": "^16.6"
+    }
+}

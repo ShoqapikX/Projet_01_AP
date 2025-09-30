@@ -1,0 +1,133 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* Fond clair */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px; /* Largeur maximale pour le contenu */
+    margin: 20px auto; /* Centrage horizontal */
+}
+
+/* Header Styles */
+header {
+    background: #35424a; /* Couleur de fond sombre */
+    color: #ffffff; /* Couleur du texte */
+    padding: 20px 0; /* Espacement vertical */
+    text-align: center; /* Alignement du texte au centre */
+}
+
+header h1 {
+    margin: 0; /* Pas de marge */
+    font-size: 2.5em; /* Taille du titre */
+}
+
+/* Styles pour les liens */
+a {
+    color: #35424a; /* Couleur de texte pour les liens */
+    text-decoration: none; /* Supprimer le soulignement */
+}
+
+a:hover {
+    color: #2a2f36; /* Couleur des liens au survol */
+    text-decoration: underline; /* Soulignement au survol */
+}
+
+nav ul {
+    list-style: none; /* Supprimer les puces de la liste */
+    padding: 0; /* Pas de remplissage */
+}
+
+nav ul li {
+    display: inline; /* Alignement horizontal des éléments de la liste */
+    margin-right: 15px; /* Espacement entre les liens */
+}
+
+nav ul li a {
+    padding: 10px 15px; /* Espacement intérieur autour des liens */
+    border-radius: 4px; /* Coins arrondis pour les liens */
+    transition: background 0.3s; /* Animation de transition pour les changements de fond */
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.2); /* Fond clair au survol */
+}
+
+/* Main Styles */
+main {
+    padding: 20px; /* Espacement intérieur */
+    background: #ffffff; /* Fond blanc */
+    border-radius: 5px; /* Coins arrondis */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre */
+}
+
+/* Form Styles */
+.add-employee {
+    margin-bottom: 20px; /* Espacement sous la section */
+}
+
+.add-employee h2 {
+    margin-top: 0; /* Pas de marge en haut */
+}
+
+.add-employee form {
+    display: flex; /* Flexbox pour alignement */
+    flex-direction: column; /* Colonne */
+}
+
+.add-employee label {
+    margin-bottom: 5px; /* Espacement sous le label */
+}
+
+.add-employee input[type="text"],
+.add-employee input[type="email"],
+.add-employee input[type="password"],
+.add-employee input[type="submit"] {
+    padding: 10px; /* Espacement intérieur */
+    margin-bottom: 10px; /* Espacement sous le champ */
+    border: 1px solid #ccc; /* Bordure */
+    border-radius: 4px; /* Coins arrondis */
+}
+
+.add-employee input[type="submit"] {
+    background: #35424a; /* Couleur de fond du bouton */
+    color: #ffffff; /* Couleur du texte */
+    cursor: pointer; /* Curseur pointer sur le bouton */
+}
+
+.add-employee input[type="submit"]:hover {
+    background: #2a2f36; /* Couleur au survol */
+}
+
+/* Table Styles */
+.employee-list table {
+    width: 100%; /* Largeur complète */
+    border-collapse: collapse; /* Supprimer les espacements entre les bordures */
+}
+
+.employee-list th,
+.employee-list td {
+    padding: 10px; /* Espacement intérieur */
+    text-align: left; /* Alignement à gauche */
+    border-bottom: 1px solid #ddd; /* Bordure inférieure */
+}
+
+.employee-list th {
+    background: #35424a; /* Couleur de fond des en-têtes */
+    color: #ffffff; /* Couleur du texte des en-têtes */
+}
+
+.employee-list tr:hover {
+    background: #f1f1f1; /* Fond gris clair au survol */
+}
+
+/* Footer Styles */
+footer {
+    text-align: center; /* Alignement au centre */
+    padding: 20px 0; /* Espacement vertical */
+    background: #35424a; /* Couleur de fond */
+    color: #ffffff; /* Couleur du texte */
+}
