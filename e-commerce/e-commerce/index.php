@@ -25,11 +25,33 @@ $AllProduits = getProduits();
             <div class="logo">
                 <img src="images/logo.png" alt="Logo Nike" class="logo-img">
             </div>
+
+            <!-- Visitor counter: integrated badge (count + label) -->
+            <div id="visitor-counter" class="visitor-counter" aria-hidden="false" title="personnes ayant visité le site">
+                <div class="visitor-badge" role="status" aria-live="polite">
+                    <span class="visitor-count">0</span>
+                    <span class="visitor-text">personnes ayant visité le site</span>
+                </div>
+            </div>
             <ul class="nav-links">
                 <li><a href="index.php">Accueil</a></li>
                 <li><a href="index.php#new-arrivals">Nouveautés</a></li>
                 <li><a href="index.php#products">Produits</a></li>
-                <li><a href="index.php#contact">Contact</a></li>
+                	<li><a href="index.php#contact">Contact</a></li>
+                	<!-- Search: icone loupe + zone de recherche qui apparaît au survol -->
+                	<li class="search-container">
+                	    <button class="search-icon" aria-label="Recherche" id="search-toggle" type="button">
+                	        <!-- Simple SVG loupe -->
+                	        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                	            <path d="M21 21l-4.35-4.35" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                	            <circle cx="11" cy="11" r="6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                	        </svg>
+                	    </button>
+                	    <div class="search-box" id="search-box">
+                	        <input type="text" id="search-input" placeholder="Rechercher des produits..." autocomplete="off">
+                	        <ul id="search-suggestions" class="search-suggestions" role="listbox" aria-label="Suggestions de recherche"></ul>
+                	    </div>
+                	</li>
             </ul>
 
             <div class="account" style="display: flex; align-items: center; gap: 15px;">
@@ -39,6 +61,8 @@ $AllProduits = getProduits();
                         <?= $clientId ? getCartCount($clientId) : 0 ?>
                     </span>
                 </div>
+
+                
 
                 <img src="images/account-icon.webp" alt="Compte" class="account-icon" id="account-icon">
                 <div style="display: flex; flex-direction: column;">
