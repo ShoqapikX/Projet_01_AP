@@ -30,12 +30,15 @@ header {
     /* Espace entre les éléments (logo à gauche, panier à droite) */
     align-items: center;
     /* Alignement vertical centré */
+    position: relative; /* anchor for absolute visitor counter */
 }
 
 .logo img {
     width: 100px;
     /* Taille du logo */
 }
+
+.logo { position: relative; }
 
 .nav-links {
     list-style-type: none;
@@ -46,11 +49,16 @@ header {
     /* Supprimer les marges */
     padding: 0;
     /* Supprimer les espacements internes */
+    align-items: center; /* vertically center items */
+    gap: 10px; /* consistent spacing between nav items */
 }
 
 .nav-links li {
-    margin: 0 15px;
+    margin: 0 12px;
     /* Espacement entre les éléments de la liste */
+    display: flex;
+    align-items: center; /* vertically center items like the search icon */
+    height: 48px; /* give a consistent hit area matching header padding */
 }
 
 .nav-links a {
@@ -61,6 +69,202 @@ header {
     font-weight: bold;
     /* Texte en gras pour les liens */
 }
+
+/* Recherche (icône loupe + zone invisible qui apparaît au survol) */
+
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 2200; /* make sure search floats above modals */
+    min-width: 40px; /* prevent the container from expanding and moving header items */
+}
+
+.search-icon {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    margin-left: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: center;
+/* legacy .logo-specific small-badge rules removed - using unified .visitor-badge */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 2300; /* above overlay elements like cart modal */
+}
+
+/* When open (or focused), expand overlay to the right without pushing layout */
+.search-box.open,
+.search-box.focused {
+    /* when explicitly open/focused keep same appearance */
+    width: 220px;
+    padding: 0 6px;
+    background: transparent;
+    border-bottom: 2px solid rgba(255,255,255,0.85);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    backdrop-filter: none;
+    pointer-events: auto;
+}
+
+.search-suggestions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    background: white;
+    color: #111;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    transform-origin: top;
+    transform: translateY(-6px);
+    opacity: 0;
+    transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.search-suggestions li {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.search-suggestions li:last-child { border-bottom: none; }
+
+.search-suggestions li:hover,
+.search-suggestions li[aria-selected="true"] {
+    background: #f5f5f5;
+}
+
+/* show suggestions with a subtle fade when box is open or focused */
+.search-box.open .search-suggestions,
+.search-box.focused .search-suggestions {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Styles pour le compteur de visiteurs (restauré) */
+/* (account-specific visitor-counter rules removed; using .visitor-counter global styles) */
+
+/* Clean visitor counter (badge + label) placed next to the logo */
+
+.visitor-counter {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 12px;
+}
+
+/* Sleek integrated pill: dark translucent background with an orange count badge */
+.visitor-badge {
+    background: rgba(255,255,255,0.04); /* subtle light on dark header */
+    color: rgba(255,255,255,0.95);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+}
+
+.visitor-badge:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.55);
+    background: rgba(255,255,255,0.06);
+}
+
+.visitor-count {
+    background: linear-gradient(180deg,#ff7a00,#ff5a00);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    min-width: 30px;
+    text-align: center;
+    font-weight: 800;
+    box-shadow: 0 6px 14px rgba(255,122,0,0.18);
+    transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms ease;
+}
+
+.visitor-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.92);
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+}
+
+@media (max-width: 520px) {
+    .visitor-text { display: none; }
+    .visitor-badge { padding: 6px 8px; min-width: 44px; }
+    .visitor-count { padding: 6px 8px; min-width: 28px; }
+}
+
+/* Animated underline on focus */
+.search-box input[type="text"] {
+    width: 100%;
+    padding: 6px 6px;
+    border: none;
+    background: transparent; /* ensure fully transparent */
+    color: #fff;
+    font-size: 13px;
+    line-height: 18px;
+    height: 22px;
+    transition: box-shadow 120ms ease, color 120ms ease;
+    outline: none; /* remove default outline on focus */
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.search-box.focused {
+    border-bottom-color: #fff;
+}
+
+/* change icon color slightly on hover for affordance */
+.search-icon svg path,
+.search-icon svg circle {
+    stroke: rgba(255,255,255,0.9);
+    transition: stroke 120ms ease, transform 160ms ease;
+}
+.search-icon:hover svg path,
+.search-icon:hover svg circle {
+    stroke: #ffd166; /* gentle warm accent */
+    transform: translateX(-1px);
+}
+
+/* Remove blue focus outline / highlight when clicking the icon */
+.search-icon:focus {
+    outline: none;
+    box-shadow: none;
+}
+.search-icon:active {
+    background: transparent;
+}
+.search-icon::-moz-focus-inner { border: 0; }
+.search-icon { -webkit-tap-highlight-color: transparent; }
+
+.search-suggestions .small-price { font-size: 12px; color: #666; margin-left: 8px; }
+
+/* compact input appearance */
+.search-box input[type="text"] {
+    width: 100%;
+    padding: 6px 6px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 13px;
+    line-height: 18px;
+    height: 22px;
+}
+
+.search-box input[type="text"]::placeholder { color: rgba(255,255,255,0.6); }
 
 /* Style du panier avec une icône et un compteur */
 .cart {
@@ -447,6 +651,18 @@ footer {
         /* Les liens de navigation passent en colonne */
     }
 
+    /* On veut que la search-box prenne presque toute la largeur sur mobile */
+    .search-box {
+        position: absolute;
+        left: 10px !important;
+        right: 10px !important;
+        top: calc(100% + 8px) !important;
+        transform: none !important;
+        width: auto;
+        max-width: calc(100vw - 20px);
+        padding: 10px;
+    }
+
     .product-grid {
         flex-direction: column;
         /* Les produits passent en colonne */
@@ -467,7 +683,18 @@ footer {
         margin-bottom: 15px;
         /* Espacement sous les liens */
     }
+    /* on small screens keep the integrated pill compact */
+    .visitor-badge { padding: 8px 8px; min-width: 36px; }
+    .visitor-text { display: none; }
 }
+
+/* pulse animation used when count updates */
+@keyframes pulse-up {
+    0% { transform: scale(1); box-shadow: 0 6px 14px rgba(255,122,0,0.18); }
+    45% { transform: scale(1.18); box-shadow: 0 12px 34px rgba(255,122,0,0.26); }
+   100% { transform: scale(1); box-shadow: 0 6px 14px rgba(255,122,0,0.18); }
+}
+.visitor-count.pulse { animation: pulse-up 380ms cubic-bezier(.2,.9,.2,1); }
 
 
 .slide {
@@ -658,40 +885,10 @@ footer {
     background-color: #1a1a1a;
 }
 
-/* Styles pour le compteur de visiteurs */
-.visitor-counter {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 25px;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    display: inline-block;
-    margin: 15px 0;
-    animation: fadeInUp 0.6s ease-out;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-}
+/* Styles pour le compteur de visiteurs (pill blanc + label discret) */
+/* (restored above as .visitor-counter/.visitor-count/.visitor-label) */
 
-.visitor-counter:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-}
-
-.visitor-counter .visitor-count {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.visitor-counter strong {
-    font-size: 18px;
-    color: #fff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
+.visitor-counter:hover { transform: translateY(-2px); }
 
 /* Variante pour le footer */
 .visitor-counter-footer {
