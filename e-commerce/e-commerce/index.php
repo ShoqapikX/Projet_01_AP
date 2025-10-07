@@ -7,14 +7,6 @@ require_once('panier/FunctionCart.php');
 $clientId = isset($_SESSION['connectedUser']['id']) ? $_SESSION['connectedUser']['id'] : null;
 $cartProducts = $clientId ? getCartProducts($clientId) : [];
 $AllProduits = getProduits();
-$searchResults = []; // Initialisation vide
-
-if (isset($_GET['query']) && !empty(trim($_GET['query']))) {
-    $search = strtolower(trim($_GET['query']));
-    $searchResults = array_filter($AllProduits, function ($prod) use ($search) {
-        return strpos(strtolower($prod['nom']), $search) !== false;
-    });
-}
 ?>
 
 <!DOCTYPE html>
@@ -115,33 +107,7 @@ if (isset($_GET['query']) && !empty(trim($_GET['query']))) {
         <button class="next">❯</button>
     </div>
 </section>
-    <section id="new-arrivals">
-    <form method="GET" action="index.php" class="search-form">
-        <input type="text" name="query" placeholder="Rechercher un produit..." 
-               value="<?= isset($_GET['query']) ? htmlspecialchars($_GET['query']) : '' ?>" 
-               class="search-input">
-        <button type="submit" class="search-button">🔍</button>
-    </form>
-    <?php if (isset($_GET['query']) && !empty(trim($_GET['query']))): ?>
-        <section id="search-results">
-            <h2>Résultats pour "<?= htmlspecialchars($_GET['query']) ?>"</h2>
-            <div class="product-grid">
-                <?php if (!empty($searchResults)): ?>
-                    <?php foreach ($searchResults as $prod): ?>
-                        <div class="product">
-                            <img src="<?= $prod['image_url']; ?>" alt="<?= htmlspecialchars($prod['nom']); ?>" class="product-image" data-hover="<?= $prod['image_hover_url']; ?>">
-                            <p><?= htmlspecialchars($prod['nom']); ?></p>
-                            <p><?= number_format($prod['prix'], 2, ',', ' '); ?> €</p>
-                            <a href="./produits/produit_details.php?id=<?= $prod['id'] ?>" class="details-button">Afficher les détails</a>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>Aucun produit trouvé.</p>
-                <?php endif; ?>
-            </div>
-        </section>
-    <?php endif; ?>
-    </section>
+
 <section id="new-arrivals">
     <h2>Nouveautés</h2>
     <div class="product-grid">
