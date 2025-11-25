@@ -1,13 +1,27 @@
 {
-    "name": "admin/e-commerce",
-    "description": "a",
+    "name": "projet01ap/e-commerce",
+    "description": "Site e-commerce Nike Basketball avec fonctionnalités avancées (recherche AJAX, recommandations, 2FA, paiement Stripe)",
+    "type": "project",
+    "keywords": ["e-commerce", "php", "stripe", "2fa", "ajax"],
+    "license": "proprietary",
     "authors": [
         {
-            "name": "admin"
+            "name": "Projet_01_AP Team"
         }
     ],
     "require": {
+        "php": "^8.0",
         "sonata-project/google-authenticator": "^2.3",
         "stripe/stripe-php": "^16.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }

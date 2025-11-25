@@ -8,6 +8,7 @@ composer.lock
 # IDE
 .vscode/
 .idea/
+.vs/
 
 # OS
 .DS_Store
@@ -19,3 +20,14 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/
+
+# Docker volumes
+db_data/
+
+# Test and debug files (keep in dev only)
+test_*.php
+fix_*.php
+fix_*.sh
+debug_*.php
+*_debug.html
+*_test.sql
