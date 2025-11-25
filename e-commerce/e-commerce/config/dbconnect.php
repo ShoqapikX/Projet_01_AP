@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 function connectDB()
 {
     $host = 'db'; // Docker service name
-    $dbname = 'ecommerce'; // Matches docker-compose.yml
+    $dbname = 'e_commerce'; // Matches docker-compose.yml and SQL file
     $username = 'ecommerceuser'; // Matches docker-compose.yml
     $password = 'ecommercepass'; // Matches docker-compose.yml
 
@@ -23,9 +23,5 @@ function connectDB()
 function closeDB($conn){ 
     $conn=null;
 }
-
-?>
-
-
 
 

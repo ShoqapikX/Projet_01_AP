@@ -1,19 +1,65 @@
 <?php
-require_once('./produits/listeProduits.php');
-require_once('./auth/functionLogin.php');
-require_once('panier/FunctionCart.php');
+/**
+ * Page d'accueil du site e-commerce Nike Basketball
+ * 
+ * Fonctionnalités :
+ * - Affichage du catalogue de produits
+ * - Slider de présentation
+ * - Recherche AJAX en temps réel
+ * - Compteur de visites
+ * - Gestion du panier
+ * 
+ * @package E-Commerce
+ * @version 1.0.0
+ */
 
-// Si l'utilisateur est connecté, on récupère son ID
-$clientId = isset($_SESSION['connectedUser']['id']) ? $_SESSION['connectedUser']['id'] : null;
-$cartProducts = $clientId ? getCartProducts($clientId) : [];
-$AllProduits = getProduits();
-$searchResults = []; // Initialisation vide
+// Activer l'affichage des erreurs en mode développement (à désactiver en production)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-if (isset($_GET['query']) && !empty(trim($_GET['query']))) {
-    $search = strtolower(trim($_GET['query']));
-    $searchResults = array_filter($AllProduits, function ($prod) use ($search) {
-        return strpos(strtolower($prod['nom']), $search) !== false;
-    });
+$errorMessage = null;
+
+try {
+    require_once('./produits/listeProduits.php');
+    require_once('./auth/functionLogin.php');
+    require_once('panier/FunctionCart.php');
+    require_once('./config/compteur_visites.php');
+
+    // Initialiser la table des visites si nécessaire
+    try {
+        initTableVisites();
+        
+        // Incrémenter le compteur de visites si nouvelle visite
+        if (estNouvelleVisite()) {
+            incrementerVisites();
+        }
+        
+        // Récupérer le nombre total de visites
+        $nombreVisites = getNombreVisites();
+    } catch (Exception $e) {
+        // Si erreur sur le compteur, continuer quand même
+        $nombreVisites = 0;
+    }
+
+    // Si l'utilisateur est connecté, on récupère son ID
+    $clientId = isset($_SESSION['connectedUser']['id']) ? $_SESSION['connectedUser']['id'] : null;
+    $cartProducts = $clientId ? getCartProducts($clientId) : [];
+    $AllProduits = getProduits();
+    $searchResults = []; // Initialisation vide
+
+    // Gestion de la recherche
+    if (isset($_GET['query']) && !empty(trim($_GET['query']))) {
+        $search = strtolower(trim($_GET['query']));
+        $searchResults = array_filter($AllProduits, function ($prod) use ($search) {
+            return strpos(strtolower($prod['nom']), $search) !== false;
+        });
+    }
+} catch (Exception $e) {
+    $errorMessage = $e->getMessage();
+    $AllProduits = [];
+    $cartProducts = [];
+    $nombreVisites = 0;
+    $clientId = null;
 }
 ?>
 
@@ -26,6 +72,40 @@ if (isset($_GET['query']) && !empty(trim($_GET['query']))) {
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+<?php if ($errorMessage): ?>
+<div style="background-color: #f8d7da; color: #721c24; padding: 20px; margin: 20px; border: 1px solid #f5c6cb; border-radius: 5px;">
+    <h2>⚠️ Erreur de connexion à la base de données</h2>
+    <p><strong>Message d'erreur :</strong> <?= htmlspecialchars($errorMessage) ?></p>
+    <p><strong>Solutions :</strong></p>
+    <ul>
+        <li>Vérifiez que Docker est lancé : <code>docker-compose up -d</code></li>
+        <li>Vérifiez que MySQL/MariaDB est actif</li>
+        <li>Vérifiez les identifiants dans <code>config/dbconnect.php</code></li>
+        <li>Importez le fichier SQL dans votre base de données</li>
+    </ul>
+    <div style="margin-top: 15px;">
+        <a href="test_config.php" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin-right: 10px;">🔧 Tester la configuration</a>
+        <a href="test_debug.php" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">🔍 Diagnostic complet</a>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php if (empty($AllProduits) && !$errorMessage): ?>
+<div style="background-color: #fff3cd; color: #856404; padding: 20px; margin: 20px; border: 1px solid #ffeeba; border-radius: 5px;">
+    <h2>📦 Aucun produit trouvé</h2>
+    <p>La connexion à la base de données fonctionne, mais aucun produit n'est disponible.</p>
+    <p><strong>Solutions :</strong></p>
+    <ul>
+        <li>Importez le fichier <code>e_commerce.sql</code> dans votre base de données</li>
+        <li>Ajoutez des produits via phpMyAdmin</li>
+        <li>Vérifiez que la table 'produits' contient des données</li>
+    </ul>
+    <div style="margin-top: 15px;">
+        <a href="test_debug.php" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">🔍 Diagnostic complet</a>
+    </div>
+</div>
+<?php endif; ?>
 
 <header>
     <nav>
@@ -116,11 +196,16 @@ if (isset($_GET['query']) && !empty(trim($_GET['query']))) {
     </div>
 </section>
     <section id="new-arrivals">
-    <form method="GET" action="index.php" class="search-form">
-        <input type="text" name="query" placeholder="Rechercher un produit..." 
+    <form method="GET" action="index.php" class="search-form" style="position: relative;">
+        <input type="text" 
+               name="query" 
+               id="search-input-ajax"
+               placeholder="Rechercher un produit..." 
                value="<?= isset($_GET['query']) ? htmlspecialchars($_GET['query']) : '' ?>" 
-               class="search-input">
+               class="search-input"
+               autocomplete="off">
         <button type="submit" class="search-button">🔍</button>
+        <div id="search-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-top: none; max-height: 400px; overflow-y: auto; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
     </form>
     <?php if (isset($_GET['query']) && !empty(trim($_GET['query']))): ?>
         <section id="search-results">
@@ -204,6 +289,7 @@ if (isset($_GET['query']) && !empty(trim($_GET['query']))) {
         </div>
     </div>
     <p>&copy; 2024 Nike Basketball. Tous droits réservés.</p>
+    <p style="font-size: 14px; color: #888; margin-top: 10px;">👥 Nombre de visites : <strong><?= number_format($nombreVisites, 0, ',', ' ') ?></strong></p>
 </footer>
 
 <script src="js/script.js"></script>
