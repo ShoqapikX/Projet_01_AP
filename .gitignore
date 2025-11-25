@@ -1,3 +1,24 @@
+# Vendor directories
 vendor/
 e-commerce/vendor/
 e-commerce/e-commerce/vendor/
+
+# IDE and editor files
+.vscode/
+.idea/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+
+# Logs
+*.log
