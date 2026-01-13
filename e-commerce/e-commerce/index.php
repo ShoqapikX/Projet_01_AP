@@ -45,6 +45,7 @@ try {
     $clientId = isset($_SESSION['connectedUser']['id']) ? $_SESSION['connectedUser']['id'] : null;
     $cartProducts = $clientId ? getCartProducts($clientId) : [];
     $AllProduits = getProduits();
+    $NouveauxProduits = getNouveauxProduits(); // Récupérer les nouveautés
     $searchResults = []; // Initialisation vide
 
     // Gestion de la recherche
@@ -57,6 +58,7 @@ try {
 } catch (Exception $e) {
     $errorMessage = $e->getMessage();
     $AllProduits = [];
+    $NouveauxProduits = [];
     $cartProducts = [];
     $nombreVisites = 0;
     $clientId = null;
@@ -229,8 +231,9 @@ try {
     </section>
 <section id="new-arrivals">
     <h2>Nouveautés</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 20px;">Découvrez nos derniers arrivages</p>
     <div class="product-grid">
-        <?php foreach ($AllProduits as $prod): ?>  
+        <?php foreach ($NouveauxProduits as $prod): ?>  
             <div class="product">
                 <img src="<?= $prod['image_url']; ?>" alt="<?= htmlspecialchars($prod['nom']); ?>" class="product-image" data-hover="<?= $prod['image_hover_url']; ?>">
                 <p><?= htmlspecialchars($prod['nom']); ?></p>
@@ -289,7 +292,10 @@ try {
         </div>
     </div>
     <p>&copy; 2024 Nike Basketball. Tous droits réservés.</p>
-    <p style="font-size: 14px; color: #888; margin-top: 10px;">👥 Nombre de visites : <strong><?= number_format($nombreVisites, 0, ',', ' ') ?></strong></p>
+    <p class="visitor-counter">
+        <span class="visitor-icon">👥</span> 
+        Nombre de visites : <strong class="visitor-number"><?= number_format($nombreVisites, 0, ',', ' ') ?></strong>
+    </p>
 </footer>
 
 <script src="js/script.js"></script>

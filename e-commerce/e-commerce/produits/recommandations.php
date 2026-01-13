@@ -34,12 +34,18 @@ require_once(__DIR__ . '/../config/dbconnect.php');
 function initTableProduitsVus() {
     $conn = connectDB();
     
-    // Ajouter la colonne catégorie à la table produits si elle n'existe pas
-    $sql = "ALTER TABLE produits ADD COLUMN IF NOT EXISTS categorie VARCHAR(100) DEFAULT 'Basket'";
-    try {
-        $conn->exec($sql);
-    } catch (PDOException $e) {
-        // La colonne existe déjà
+    // Vérifier si la colonne categorie existe dans la table produits
+    $sql = "SHOW COLUMNS FROM produits LIKE 'categorie'";
+    $result = $conn->query($sql);
+    
+    if ($result->rowCount() == 0) {
+        // Ajouter la colonne categorie si elle n'existe pas
+        $sql = "ALTER TABLE produits ADD COLUMN categorie VARCHAR(100) DEFAULT 'Basket'";
+        try {
+            $conn->exec($sql);
+        } catch (PDOException $e) {
+            // La colonne existe déjà ou erreur - continuer
+        }
     }
     
     // Créer la table des produits vus

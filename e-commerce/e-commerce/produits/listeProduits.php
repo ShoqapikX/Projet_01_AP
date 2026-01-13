@@ -15,20 +15,25 @@ function getNouveauxProduits()
 {
     $conn = connectDB();
     
-    // Requête pour récupérer les produits ajoutés dans le dernier mois
-    $sql = "SELECT * FROM produits WHERE Creation_produit >= CURRENT_DATE() - INTERVAL 1 MONTH LIMIT 2";
+    // Récupérer uniquement les produits récents (ajoutés dans les 60 derniers jours)
+    // ET limiter à 4 produits maximum
+    // Triés par date de sortie décroissante (les plus récents en premier)
+    $sql = "SELECT * FROM produits 
+            WHERE date_sortie >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
+            ORDER BY date_sortie DESC 
+            LIMIT 4";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $nouveaux_produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    if ($nouveaux_produits) {
-        return $nouveaux_produits;
-    } else {
-        // Si aucun produit récent, récupère les plus récents quand même
-        $sql = "SELECT * FROM produits ORDER BY Creation_produit DESC LIMIT 2";
+    // Si aucun produit récent (moins de 60 jours), prendre les 3 plus récents quand même
+    if (empty($nouveaux_produits)) {
+        $sql = "SELECT * FROM produits ORDER BY date_sortie DESC LIMIT 3";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $nouveaux_produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $nouveaux_produits;
     }
+    
+    closeDB($conn);
+    return $nouveaux_produits;
 }

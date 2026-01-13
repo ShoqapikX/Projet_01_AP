@@ -438,6 +438,52 @@ footer {
     /* Agrandir légèrement les icônes au survol */
 }
 
+/* Visitor Counter Styles - Subtle & Elegant */
+.visitor-counter {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 15px;
+    letter-spacing: 0.3px;
+    transition: color 0.3s ease;
+}
+
+.visitor-counter:hover {
+    color: #fff;
+}
+
+.visitor-icon {
+    font-size: 16px;
+    margin-right: 5px;
+    display: inline-block;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.visitor-number {
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-left: 5px;
+    transition: all 0.3s ease;
+}
+
+.visitor-counter:hover .visitor-number {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
+
+/* Subtle pulse animation for icon */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
 /* Responsiveness */
 /* Styles pour petits écrans (moins de 768px de large) */
 @media (max-width: 768px) {
